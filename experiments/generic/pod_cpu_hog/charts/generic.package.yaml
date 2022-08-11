@@ -1,0 +1,5 @@
+packageName: generic
+experiments:
+  - name: pod_cpu_hog
+    CSV: pod_cpu_hog.chartserviceversion.yaml
+    desc: "pod_cpu_hog"

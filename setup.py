@@ -79,6 +79,14 @@ packages = [
 	'experiments/aws_az/aws_az_chaos',
 	'experiments/aws_az/aws_az_chaos/experiment',
  	'experiments/generic/pod_delete/experiment',
+	'chaosLib/litmus/pod_cpu_hog',
+	'chaosLib/litmus/pod_cpu_hog/lib',
+	'pkg/generic',
+	'pkg/generic/environment',
+	'pkg/generic/types',
+	'experiments/generic',
+	'experiments/generic/pod_cpu_hog',
+	'experiments/generic/pod_cpu_hog/experiment',
 ]
 needs_pytest = set(['pytest', 'test']).intersection(sys.argv)
 package_data = {

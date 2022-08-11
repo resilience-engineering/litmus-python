@@ -1,14 +1,13 @@
 ---
-name: "sample_exec_chaos"
+name: "pod_cpu_hog"
 version: "0.1.0"
-category: "sample_category"
-repository: "https://github.com/litmuschaos/litmus-python/tree/master/sample_category/sample_exec_chaos"
-community: "https://kubernetes.slack.com/messages/CNXNB0ZTN"
-description: "it execs inside target pods to run the chaos inject commands, waits for the chaos duration and reverts the chaos"
+category: "generic"
+repository: "https://github.com/resilience-engineering/chaos-charts-test.git"
+description: "it inject particuar pod cpu and then it  waits for the chaos duration and reverts the chaos"
 keywords:
   - "pods"
   - "kubernetes"
-  - "sample-category"
+  - "pod-cpu-hog"
   - "exec"
 platforms:
   - Minikube
@@ -41,11 +40,11 @@ permissions:
        - "deletecollection"
 maturity: "alpha"
 maintainers:
-  - name: "oumkale"
-    email: "oumkale@chaosnative.com"
-provider:
-  name: "ChaosNative"
+  - name: "gayathri"
+    email: "egayathrir112@gmail.com"
 minkubernetesversion: "1.12.0"
+provider:
+  name: "gayathri"
 references:
   - name: Documentation
     url: "https://docs.litmuschaos.io/docs/getstarted/"
