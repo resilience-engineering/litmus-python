@@ -1,4 +1,5 @@
-import os, boto3
+import os
+import boto3
 from kubernetes import client, config, dynamic
 from kubernetes.client import api_client
 
@@ -15,6 +16,8 @@ class AWSClient(object):
     def __init__(self):
         self.clientElb =  boto3.client('elb')
         self.clientElbv2 =  boto3.client('elbv2')
+        self.clientEC2 =  boto3.client('ec2')
+
 
 # Config maintain configuration for in and out cluster
 class Configuration(object):

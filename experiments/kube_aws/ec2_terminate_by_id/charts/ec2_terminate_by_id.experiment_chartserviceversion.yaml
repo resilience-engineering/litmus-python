@@ -1,0 +1,33 @@
+apiVersion: litmuchaos.io/v1alpha1
+kind: ChartServiceVersion
+metadata:
+  name: ec2_terminate_by_id 
+  version: 0.1.0
+  annotations:
+    categories: kube_aws
+spec:
+  displayName: ec2_terminate_by_id 
+  categoryDescription: >
+    Stopping an EC2 instance identified by ID. 
+  keywords: 
+    - "AWS" 
+    - "EC2" 
+  platforms: 
+    - "AWS" 
+  maturity: alpha
+  maintainers: 
+    - name:gayathri 
+      email:egayathrir112@gmail.com 
+  minKubeVersion: 1.12.0 
+  provider: 
+    name: gayathri
+  labels:
+    app.kubernetes.io/component: chartserviceversion
+    app.kubernetes.io/version: latest
+  links: 
+    - name:Documentation 
+      url:https://docs.litmuschaos.io/docs/getstarted/ 
+  icon:
+    - url: 
+      mediatype: ""
+  chaosexpcrdlink: https://raw.githubusercontent.com/litmuschaos/chaos-charts/master/charts/kube_aws/ec2_terminate_by_id/experiment.yaml

@@ -1,0 +1,71 @@
+apiVersion: litmuschaos.io/v1alpha1
+description:
+  message: |
+    Stopping an EC2 instance identified by ID.
+kind: ChaosExperiment
+metadata:
+  name: ec2_terminate_by_id
+  labels:
+    name: ec2_terminate_by_id
+    app.kubernetes.io/part-of: litmus
+    app.kubernetes.io/component: chaosexperiment
+    app.kubernetes.io/version: latest
+spec:
+  definition:
+    scope: Cluster
+    permissions:
+      - apiGroups: 
+          - "" 
+          - "batch" 
+          - "apps" 
+          - "litmuschaos.io" 
+        resources: 
+          - "jobs" 
+          - "pods" 
+          - "pods/log" 
+          - "events" 
+          - "deployments" 
+          - "replicasets" 
+          - "pods/exec" 
+          - "chaosengines" 
+          - "chaosexperiments" 
+          - "chaosresults" 
+          - "secrets" 
+          - "configmaps" 
+          - "nodes" 
+        verbs: 
+          - "create" 
+          - "list" 
+          - "get" 
+          - "patch" 
+          - "update" 
+          - "delete" 
+          - "deletecollection" 
+          - "get" 
+          - "list" 
+    image: "litmuschaos/py-runner:latest"
+    imagePullPolicy: Always
+    args:
+    - -c
+    - python3 -u experiment
+    command:
+    - /bin/bash
+    env:
+
+    - name: TOTAL_CHAOS_DURATION
+      value: '' 
+
+    - name: CHAOS_INTERVAL
+      value: ''
+
+    - name: LIB
+      value: ''
+
+    - name: RAMP_TIME
+      value: ''
+      
+    labels:
+      name: ec2_terminate_by_id
+      app.kubernetes.io/part-of: litmus
+      app.kubernetes.io/component: experiment-job
+      app.kubernetes.io/version: latest 

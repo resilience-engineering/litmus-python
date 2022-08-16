@@ -1,77 +1,115 @@
-from distutils.log import error
-from re import subn
-import boto3, logging
+from optparse import Values
+import sys
+import boto3
+import logging
 import pkg.utils.client.client as client
+import pkg.utils.common.common as common
+from botocore.exceptions import ClientError
+import time
+# import config
 
-# AWS_AZ class is checking the status of LoadBalancer and availablity zone
-class AWS_AZ(object):
+# AWS_AZ class is checking the status of Ec2 instances
+
+
+class AWS_AZ():
     def __init__(self, client=None):
         self.clients = client
 
-    # CheckAWSStatus checks target load balancer availability
+    # CheckAWSStatus will verify and give the ec2 instance details
     def CheckAWSStatus(self, experimentsDetails):
+
+        self.clients = client.AWSClient().clientEC2
+        if experimentsDetails.EC2InstanceId == "" or experimentsDetails.InstanceRegion == "":
+            return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
         
-        self.clients = client.AWSClient().clientElb
-        
-        if experimentsDetails.LoadBalancerName == "" or experimentsDetails.LoadBalancerZones == "" :
-            return ValueError("Provided LoadBalancer Name or LoadBalanerZoner are empty")
-        
         try:
-            self.clients.describe_load_balancers()['LoadBalancerDescriptions']
-        except Exception as exp:
-            return ValueError(exp)
-        logging.info("[Info]: LoadBalancer and Availablity of zone has been checked")
-
-    def getSubnetFromVPC(self, experimentsDetails): 
-        client = boto3.client('elb')
-        try:
-            response = client.describe_load_balancers(
-                LoadBalancerNames=[
-                    experimentsDetails.LoadBalancerName,
-                ]
-            )
-            return (response['LoadBalancerDescriptions'][0]['Subnets'])
-        except (self.clients.exceptions.AccessPointNotFoundException, self.clients.exceptions.InvalidConfigurationRequestException) as exp:
-            return ValueError(exp)
-
-    def getTargetSubnet(self, experimentsDetails, zone):
-        client = boto3.client('ec2')
-        try:
-            lst=self.getSubnetFromVPC(experimentsDetails)
-            i=0
-            for i in range(len(lst)):
-                response = client.describe_subnets(
-                    SubnetIds=[
-                        lst[i],
-                    ],
-                )
-                if(response['Subnets'][0]['AvailabilityZone']) == zone:
-                    return lst[i], None
-        except (self.clients.exceptions.AccessPointNotFoundException, self.clients.exceptions.InvalidConfigurationRequestException) as exp:
-            return lst[i], ValueError(exp)
+            
+            reservations = self.clients.describe_instances(
+                InstanceIds=[experimentsDetails.EC2InstanceId])
+            #print(reservations)   
+            for pythonins in reservations['Reservations']:
+                for printout in pythonins['Instances']:
+                    print(printout['InstanceId'])
+                    #print(printout['InstanceType'])
+                    print(printout['State']['Name'])
+                    if  printout['State']['Name'] != "running":
+                        logging.info("[Info]: The instance state is not running")
+                        sys.exit("The instance state is not running")
+                    else :
+                        logging.info("[Info]: EC2instanceID and InstanceRegion of region has been checked")
+        except ClientError as e:
+                logging.error(e.args[0])
+                print(e)
+            
 
 
-    def detachSubnet(self, experimentsDetails, subnet): 
-        client = boto3.client('elb')
-        try:
-                response = client.detach_load_balancer_from_subnets(
-                LoadBalancerName=experimentsDetails.LoadBalancerName,
-                Subnets=subnet
-            )
-                if (response['ResponseMetadata']['HTTPStatusCode']) != "200":
-                    ValueError("[Error]: Fail to detach the target subnet %s", subnet)
-        except (self.clients.exceptions.AccessPointNotFoundException, self.clients.exceptions.InvalidConfigurationRequestException) as exp:
-            return ValueError(exp)
 
-    def attachSubnet(self, experimentsDetails, subnet): 
-        client = boto3.client('elb')
+    '''# stopEC2 instance
+    def EC2Stop(self, experimentsDetails):
+     
+        self.clients = client.AWSClient().clientEC2   
+        if experimentsDetails.EC2InstanceId == "" or experimentsDetails.InstanceRegion == "":
+            return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
+
         try:
-                response = client.attach_load_balancer_to_subnets(
-                LoadBalancerName=experimentsDetails.LoadBalancerName,
-                Subnets=subnet
-            )
-                if (response['ResponseMetadata']['HTTPStatusCode']) != "200":
-                    ValueError("[Error]: Fail to attach the target subnet %s", subnet)
-        except (self.clients.exceptions.AccessPointNotFoundException, self.clients.exceptions.InvalidConfigurationRequestException) as exp:
-            return ValueError(exp)
-        
+            self.clients.stop_instances(experimentsDetails.EC2InstanceId)
+            print(f'Stopping EC2 instance: {experimentsDetails.EC2InstanceId}')
+            self.instance.wait_until_stopped()
+            print(
+                f'EC2 instance "{experimentsDetails.EC2InstanceId}" has been stopped')
+
+        except ClientError as e:
+            logging.error(e.args[0])
+            print(e)
+
+    def EC2Start(self, experimentsDetails):
+
+        self.clients = client.AWSClient().clientEC2
+        if experimentsDetails.EC2InstanceId == "" or experimentsDetails.InstanceRegion == "":
+            return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
+
+        try:
+
+            response = "Successfully started instances: " + \
+                str(experimentsDetails.EC2InstanceId)
+            self.clients.start_instances(experimentsDetails.EC2InstanceId)
+            print(f'Starting EC2 instance: {experimentsDetails.EC2InstanceId}')
+            self.clients.wait_until_stopped()
+            print(
+                f'EC2 instance "{experimentsDetails.EC2InstanceId}" has been started')
+
+        except ClientError as e:
+            logging.error(e.args[0])
+            print(e)
+
+    def WaitForEC2Down(self, experimentsDetails):
+
+        self.clients = client.AWSClient().clientEC2
+        if experimentsDetails.EC2InstanceId == "" or experimentsDetails.InstanceRegion == "":
+            return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
+        try:
+
+            reservations = self.clients.GetEC2InstanceStatus(
+                experimentsDetails.EC2InstanceId, experimentsDetails.InstanceRegion)
+            if reservations != "stopped":
+                logging.info("[Info]: The instance state is not yet stopped")
+            elif reservations != "terminated" :
+                logging.info("[Info]: The instance state is not yet stopped")
+        except ClientError as e:
+            logging.error(e.args[0])
+            print(e)
+            
+    def WaitForEC2Ups(self, experimentsDetails):
+
+        self.clients = client.AWSClient().clientEC2
+        if experimentsDetails.EC2InstanceId == "" or experimentsDetails.InstanceRegion == "":
+            return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
+        try:
+
+            reservations = self.clients.GetEC2InstanceStatus(
+                experimentsDetails.EC2InstanceId, experimentsDetails.InstanceRegion)
+            if reservations != "Running":
+                logging.info("[Info]: The instance state is not yet started")
+        except ClientError as e:
+            logging.error(e.args[0])
+            print(e)        '''

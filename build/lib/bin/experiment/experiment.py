@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-
 import experiments.aws_az.aws_az_chaos.experiment.aws_az_chaos as aws_az_chaos
 import experiments.generic.pod_delete.experiment.pod_delete as pod_delete
 import experiments.generic.pod_cpu_hog.experiment.pod_cpu_hog as experiment
+import experiments.kube_aws.ec2_terminate_by_id.experiment.ec2_terminate_by_id as ec2TerminateByID
 import argparse
 import logging
 import pkg.utils.client.client as client
@@ -27,8 +27,10 @@ def main():
 		pod_delete.PodDelete(clients)
 	elif args.name == "aws-az-chaos":
 		aws_az_chaos.AwsAzExperiment(clients)
+	elif args.name == "ec2teminatebyid":
+		ec2TerminateByID.Experiment(clients)
 	elif args.name == "pod-cpu-hog":
-         	experiment.Experiment(clients)
+		experiment.Experiment(clients)
 	else:
 		logging.error("Unsupported -name %s, please provide the correct value of -name args", args.name)
 	return

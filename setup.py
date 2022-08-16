@@ -87,6 +87,14 @@ packages = [
 	'experiments/generic',
 	'experiments/generic/pod_cpu_hog',
 	'experiments/generic/pod_cpu_hog/experiment',
+	'chaosLib/litmus/ec2_terminate_by_id',
+	'chaosLib/litmus/ec2_terminate_by_id/lib',
+	'pkg/kube_aws',
+	'pkg/kube_aws/environment',
+	'pkg/kube_aws/types',
+	'experiments/kube_aws',
+	'experiments/kube_aws/ec2_terminate_by_id',
+	'experiments/kube_aws/ec2_terminate_by_id/experiment'
 ]
 needs_pytest = set(['pytest', 'test']).intersection(sys.argv)
 package_data = {

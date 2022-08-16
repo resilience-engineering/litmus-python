@@ -1,0 +1,54 @@
+---
+name: "ec2_terminate_by_id"
+version: "0.1.0"
+category: "kube_aws"
+repository: "https://github.com/resilience-engineering/litmus-python.git"
+community: "https://kubernetes.slack.com/messages/CNXNB0ZTN"
+description: "Stopping an EC2 instance identified by ID."
+keywords:
+  - "AWS"
+  - "EC2"
+platforms:
+  - AWS
+scope: "Cluster"
+auxiliaryappcheck: false
+permissions:
+  - apigroups:
+      - ""
+      - "batch"
+      - "apps"
+      - "litmuschaos.io"
+    resources:
+      - "jobs"
+      - "pods"
+      - "pods/log"
+      - "events"
+      - "deployments"
+      - "replicasets"
+      - "pods/exec"
+      - "chaosengines"
+      - "chaosexperiments"
+      - "chaosresults"
+      - "secrets"
+      - "configmaps"
+      - "nodes"
+    verbs:
+       - "create"
+       - "list"
+       - "get"
+       - "patch"
+       - "update"
+       - "delete"
+       - "deletecollection"
+       - "get"
+       - "list"
+maturity: "alpha"
+maintainers:
+  - name: "gayathri"
+    email: "egayathrir112@gmail.com"
+provider:
+  name: "gayathri"
+minkubernetesversion: "1.12.0"
+references:
+  - name: Documentation
+    url: "https://docs.litmuschaos.io/docs/getstarted/"
