@@ -20,7 +20,7 @@ def GetENV(experimentDetails):
 	experimentDetails.Force = (os.getenv("FORCE", "false") == 'true')
 	experimentDetails.Delay = maths.atoi(os.getenv("STATUS_CHECK_DELAY", "2"))
 	experimentDetails.Timeout = maths.atoi(os.getenv("STATUS_CHECK_TIMEOUT", "180"))
-	experimentDetails.EC2InstanceId = os.getenv("EC2_INSTANCE_ID", "i-0c7dddf7a37be18d1")
+	experimentDetails.EC2InstanceId = os.getenv("EC2_INSTANCE_ID", "i-0e4ca84f1e8b4091c")
 	experimentDetails.InstanceRegion = os.getenv("InstanceRegion", "ap-south-1")
 	experimentDetails.PodsAffectedPerc = maths.atoi(os.getenv("PODS_AFFECTED_PERC", "0"))
 	experimentDetails.Sequence = os.getenv("SEQUENCE", "parallel")

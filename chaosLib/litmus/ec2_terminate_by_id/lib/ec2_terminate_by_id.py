@@ -172,7 +172,7 @@ def injectChaosInParallelMode(experimentsDetails , EC2InstanceIdList, chaosDetai
 
 		#Verify the status of available zone after the chaos injection
 		logging.info("[Status]: Checking AWS EC2 instance status")		
-		err = awslib.CheckAWSStatus(experimentsDetails)
+		err = awslib1.CheckAWSStatus(experimentsDetails)
 		if err != None:
 			return err
 

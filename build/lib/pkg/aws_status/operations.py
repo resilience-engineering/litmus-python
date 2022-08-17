@@ -72,12 +72,38 @@ def WaitForEC2Up(experimentsDetails):
         [experimentsDetails.EC2InstanceId])
         for pythonins in instanceState['Reservations']:
                 for printout in pythonins['Instances']:
-                    print(printout['InstanceId'])
+                    #print(printout['InstanceId'])
                     #print(printout['InstanceType'])
-                    print(printout['State']['Name'])
+                    #print(printout['State']['Name'])
                     if printout['State']['Name'] != "running":
                         logging.info("[Info]: The instance state is not yet started")
                         sys.exit("The instance state is not running")
     except ClientError as e:
             logging.error(e.args[0])
-            print(e)   
+            print(e)  
+
+
+def CheckAWSStatus(experimentsDetails):
+
+        ec2svc = client.AWSClient().clientEC2
+        if experimentsDetails.EC2InstanceId == "" or experimentsDetails.InstanceRegion == "":
+            return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
+        
+        try:
+            
+            reservations = ec2svc.describe_instances(
+                InstanceIds=[experimentsDetails.EC2InstanceId])
+            #print(reservations)   
+            for pythonins in reservations['Reservations']:
+                for printout in pythonins['Instances']:
+                    #print(printout['InstanceId'])
+                    #print(printout['InstanceType'])
+                    #print(printout['State']['Name'])
+                    if  printout['State']['Name'] != "running":
+                        logging.info("[Info]: The instance state is not running")
+                        sys.exit("The instance state is not running")
+                    else :
+                        logging.info("[Info]: EC2instanceID and InstanceRegion of region has been checked")
+        except ClientError as e:
+                logging.error(e.args[0])
+                print(e) 
