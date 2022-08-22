@@ -5,7 +5,7 @@ import pkg.maths.maths as maths
 
 #GetENV fetches all the env variables from the runner pod
 def GetENV(experimentDetails):
-	experimentDetails.ExperimentName =  os.getenv("EXPERIMENT_NAME", "ec2teminatebyid")
+	experimentDetails.ExperimentName =  os.getenv("EXPERIMENT_NAME", "ec2terminatebyid")
 	experimentDetails.ChaosNamespace = os.getenv("CHAOS_NAMESPACE", "litmus")
 	experimentDetails.EngineName = os.getenv("CHAOSENGINE", "")
 	experimentDetails.ChaosDuration = maths.atoi(os.getenv("TOTAL_CHAOS_DURATION", "30"))
