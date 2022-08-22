@@ -13,7 +13,7 @@ def EC2Stop(experimentsDetails):
         return ValueError("Provided EC2InstanceId or InstanceRegion are empty")
 
     try:
-        print([experimentsDetails.EC2InstanceId])
+        #print([experimentsDetails.EC2InstanceId])
         ec2svc.stop_instances(InstanceIds=[experimentsDetails.EC2InstanceId])
         print(f'Stopping EC2 instance: {experimentsDetails.EC2InstanceId}')
         print(f'EC2 instance "{experimentsDetails.EC2InstanceId}" has been stopped')
@@ -52,10 +52,11 @@ def WaitForEC2Down(experimentsDetails):
         [experimentsDetails.EC2InstanceId])
         for pythonins in instanceState['Reservations']:
                 for printout in pythonins['Instances']:
-                    print(printout['InstanceId'])
-                    print(printout['InstanceType'])
-                    print(printout['State']['Name'])
+                    #print(printout['InstanceId'])
+                    #print(printout['InstanceType'])
+                    #print(printout['State']['Name'])
                     if printout['State']['Name'] != "stopped":
+                        logging.info("[Info]: The instance state is not yet stopped")
                         sys.exit("The instance state is not stopped")
     except ClientError as e:
         logging.error(e.args[0])
