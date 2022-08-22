@@ -2,7 +2,7 @@ FROM python:3.8.13
 
 LABEL maintainer="LitmusChaos"
 
-ARG TARGETARCH
+ARG TARGETARCH="amd64"
 
 # upgrade and setup python
 RUN apt-get update \
