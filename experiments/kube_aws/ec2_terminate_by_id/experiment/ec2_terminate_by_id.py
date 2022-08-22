@@ -38,8 +38,6 @@ def Experiment(clients):
 	#Updating the chaos result in the beginning of experiment
 	print(experimentsDetails.ExperimentName)
 	logging.info("[PreReq]: Updating the chaos result of %s experiment (SOT)",(experimentsDetails.ExperimentName))
-	print(experimentsDetails.ExperimentName)
-	print(chaosDetails, resultDetails, "SOT", clients)
 	err = result.ChaosResult(chaosDetails, resultDetails, "SOT", clients)
 	if err != None:
 		logging.error("Unable to Create the Chaos Result, err: %s",(err))
