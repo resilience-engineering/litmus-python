@@ -27,7 +27,7 @@ def main():
 		pod_delete.PodDelete(clients)
 	elif args.name == "aws-az-chaos":
 		aws_az_chaos.AwsAzExperiment(clients)
-	elif args.name == "ec2teminatebyid":
+	elif args.name == "ec2terminatebyid":
 		ec2TerminateByID.Experiment(clients)
 	elif args.name == "pod-cpu-hog":
 		experiment.Experiment(clients)
