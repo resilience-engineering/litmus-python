@@ -29,14 +29,14 @@ class AWS_AZ():
             #print(reservations)   
             for pythonins in reservations['Reservations']:
                 for printout in pythonins['Instances']:
-                    print(printout['InstanceId'])
+                    #print(printout['InstanceId'])
                     #print(printout['InstanceType'])
-                    print(printout['State']['Name'])
+                    #print(printout['State']['Name'])
                     if  printout['State']['Name'] != "running":
                         logging.info("[Info]: The instance state is not running")
                         sys.exit("The instance state is not running")
                     else :
-                        logging.info("[Info]: EC2instanceID and InstanceRegion of region has been checked")
+                        logging.info("[Info]: EC2instanceID and InstanceRegion of region has been running status")
         except ClientError as e:
                 logging.error(e.args[0])
                 print(e)
